@@ -74,8 +74,32 @@ class Pakan extends BaseController
     public function laporan_produksi()
     {
         $laporanModel = new LaporanProduksiPakanModel();
+        
+        $default_bulan = date('n', strtotime('first day of last month'));
+        $default_tahun = date('Y', strtotime('first day of last month'));
+        
+        $bulan = $this->request->getGet('bulan');
+        $tahun = $this->request->getGet('tahun');
+        
+        if ($bulan === null) {
+            $bulan = $default_bulan;
+        }
+        if ($tahun === null) {
+            $tahun = $default_tahun;
+        }
+        
+        $filters = [];
+        if ($bulan !== 'all') {
+            $filters['bulan'] = $bulan;
+        }
+        if ($tahun !== 'all') {
+            $filters['tahun'] = $tahun;
+        }
+
         $data['title'] = 'Daftar Laporan Produksi Pakan';
-        $data['laporan'] = $laporanModel->get_all();
+        $data['laporan'] = $laporanModel->get_all($filters);
+        $data['selected_bulan'] = $bulan;
+        $data['selected_tahun'] = $tahun;
 
         return view('template/header', $data)
              . view('pakan/v_laporan_produksi_index', $data)
@@ -105,7 +129,8 @@ class Pakan extends BaseController
             'id_kelompok' => $this->request->getPost('id_kelompok'),
             'bulan'       => $this->request->getPost('bulan'),
             'tahun'       => $this->request->getPost('tahun'),
-            'status'      => 'draft'
+            'status'      => 'draft',
+            'created_by'  => session()->get('user_id')
         ];
         $id_laporan = $laporanModel->insert($laporan_data);
 
@@ -114,15 +139,19 @@ class Pakan extends BaseController
 
         if (is_array($id_jenis_pakan)) {
             for ($i = 0; $i < count($id_jenis_pakan); $i++) {
-                $detail_data = [
-                    'id_laporan'      => $id_laporan,
-                    'id_jenis_pakan'   => $id_jenis_pakan[$i],
-                    'jumlah_produksi' => $jumlah_produksi[$i]
-                ];
-                $detailModel->insert($detail_data);
+                $jumlah = $jumlah_produksi[$i];
+                if ($jumlah !== '' && $jumlah !== null && $jumlah > 0) {
+                    $detail_data = [
+                        'id_laporan'      => $id_laporan,
+                        'id_jenis_pakan'   => $id_jenis_pakan[$i],
+                        'jumlah_produksi' => $jumlah
+                    ];
+                    $detailModel->insert($detail_data);
+                }
             }
         }
 
+        session()->setFlashdata('success', 'Laporan Produksi Pakan berhasil disimpan.');
         return redirect()->to(base_url('pakan/laporan_produksi'));
     }
 
@@ -154,8 +183,56 @@ class Pakan extends BaseController
         $data['jenis_pakan'] = $jenisPakanModel->get_all();
 
         return view('template/header', $data)
-             . view('pakan/v_laporan_produksi_form_edit', $data)
+             . view('pakan/v_laporan_produksi_form', $data)
              . view('template/footer');
+    }
+
+    public function laporan_produksi_update($id)
+    {
+        $laporanModel = new LaporanProduksiPakanModel();
+        $detailModel = new DetailProduksiPakanModel();
+
+        $laporan_data = [
+            'id_kelompok' => $this->request->getPost('id_kelompok'),
+            'bulan'       => $this->request->getPost('bulan'),
+            'tahun'       => $this->request->getPost('tahun'),
+        ];
+        $laporanModel->update($id, $laporan_data);
+
+        // Delete old details first
+        $detailModel->delete_by_laporan($id);
+
+        $id_jenis_pakan = $this->request->getPost('id_jenis_pakan');
+        $jumlah_produksi = $this->request->getPost('jumlah_produksi');
+
+        if (is_array($id_jenis_pakan)) {
+            for ($i = 0; $i < count($id_jenis_pakan); $i++) {
+                $jumlah = $jumlah_produksi[$i];
+                if ($jumlah !== '' && $jumlah !== null && $jumlah > 0) {
+                    $detail_data = [
+                        'id_laporan'      => $id,
+                        'id_jenis_pakan'   => $id_jenis_pakan[$i],
+                        'jumlah_produksi' => $jumlah
+                    ];
+                    $detailModel->insert($detail_data);
+                }
+            }
+        }
+
+        session()->setFlashdata('success', 'Laporan Produksi Pakan berhasil diperbarui.');
+        return redirect()->to(base_url('pakan/laporan_produksi'));
+    }
+
+    public function laporan_produksi_delete($id)
+    {
+        $laporanModel = new LaporanProduksiPakanModel();
+        $detailModel = new DetailProduksiPakanModel();
+
+        $detailModel->delete_by_laporan($id);
+        $laporanModel->delete($id);
+
+        session()->setFlashdata('success', 'Laporan Produksi Pakan berhasil dihapus.');
+        return redirect()->to(base_url('pakan/laporan_produksi'));
     }
 
     public function laporan_bulanan()

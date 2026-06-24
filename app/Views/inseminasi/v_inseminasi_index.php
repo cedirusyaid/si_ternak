@@ -58,7 +58,7 @@
                                         <?php endif; ?>
                                     </td>
                                     <td>
-                                        <a href="#" class="btn btn-info btn-xs">Detail</a>
+                                        <a href="<?= site_url('inseminasi/detail_ib/' . $ib->id_ib) ?>" class="btn btn-info btn-xs"><i class="fa fa-eye"></i> Detail</a>
                                         <a href="<?= site_url('inseminasi/edit_ib/' . $ib->id_ib) ?>" class="btn btn-warning btn-xs">Edit</a>
                                         <a href="<?= site_url('inseminasi/destroy_ib/' . $ib->id_ib) ?>" class="btn btn-danger btn-xs" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Hapus</a>
                                     </td>

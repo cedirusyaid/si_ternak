@@ -1,5 +1,16 @@
 # RELEASE NOTES - SI TERNAK
 
+## [v1.0.4] - 2026-06-24
+### ✨ Added
+- Menambahkan Halaman Detail Inseminasi Buatan (`inseminasi/detail_ib`) yang menampilkan rincian data inseminasi (status, tanggal, inseminator, identitas hewan, pemilik, alamat lengkap, dan metadata pembuat).
+- Menambahkan method `detail_ib` di controller `Inseminasi` dan menyisipkan tautan detail pada tabel indeks inseminasi.
+- Menambahkan method `laporan_produksi_update` dan `laporan_produksi_delete` pada controller `Pakan` untuk melengkapi alur CRUD.
+
+### 🔄 Changed
+- Menyederhanakan form Laporan Produksi Pakan (`pakan/laporan_produksi_create` & `pakan/laporan_produksi_edit`) menjadi form grid/tabel berisi seluruh jenis pakan aktif secara otomatis untuk memudahkan input satu kali simpan.
+- Menyatukan view form tambah dan edit laporan pakan ke dalam satu file view terpadu (`v_laporan_produksi_form.php`).
+- Menerapkan filter bulanan otomatis (`onchange` auto-submit) pada halaman daftar Laporan Produksi Pakan dengan default mengarah ke data **bulan lalu**.
+
 ## [v1.0.3] - 2026-06-24
 ### ✨ Added
 - Menambahkan kolom `id_kelompok`, `tahun_anggaran`, `sumber_dana`, dan `ras_ternak` pada tabel `peternak` untuk mendukung alokasi bantuan per individu (bantuan per orang).

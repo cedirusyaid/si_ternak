@@ -63,6 +63,21 @@ class Inseminasi extends BaseController
         return redirect()->to(base_url('inseminasi'));
     }
 
+    public function detail_ib($id)
+    {
+        $inseminasiModel = new InseminasiModel();
+        $data['title'] = 'Detail Inseminasi Buatan';
+        $data['ib'] = $inseminasiModel->get_inseminasi($id);
+
+        if (!$data['ib']) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        return view('template/header', $data)
+             . view('inseminasi/v_inseminasi_detail', $data)
+             . view('template/footer');
+    }
+
     public function edit_ib($id)
     {
         $inseminasiModel = new InseminasiModel();
