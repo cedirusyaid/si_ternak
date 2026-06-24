@@ -18,7 +18,7 @@ class InseminasiModel extends Model
     {
         $db = \Config\Database::connect();
         $builder = $db->table('inseminasi');
-        $builder->select('inseminasi.*, hewan.nama_hewan, peternak.nama_peternak, petugas_lapangan.nama_petugas');
+        $builder->select('inseminasi.*, hewan.nama_hewan, peternak.id_peternak, peternak.nama_peternak, peternak.alamat, peternak.desa as peternak_desa, peternak.kecamatan as peternak_kecamatan, petugas_lapangan.nama_petugas');
         $builder->join('hewan', 'hewan.id_hewan = inseminasi.id_hewan', 'left');
         $builder->join('peternak', 'peternak.id_peternak = hewan.id_peternak', 'left');
         $builder->join('petugas_lapangan', 'petugas_lapangan.id_petugas = inseminasi.id_petugas', 'left');

@@ -84,6 +84,7 @@ class Master extends BaseController
     public function peternak_add()
     {
         $peternakModel = new PeternakModel();
+        $kelompokModel = new \App\Models\KelompokTernakModel();
         $rules = [
             'id_peternak'   => 'required|is_unique[peternak.id_peternak]',
             'nama_peternak' => 'required'
@@ -96,6 +97,7 @@ class Master extends BaseController
         }
 
         $data['title'] = "Tambah Peternak";
+        $data['kelompok_list'] = $kelompokModel->findAll();
         return view('template/header', $data)
              . view('master/peternak/v_form', $data)
              . view('template/footer');
@@ -104,6 +106,7 @@ class Master extends BaseController
     public function peternak_edit($id)
     {
         $peternakModel = new PeternakModel();
+        $kelompokModel = new \App\Models\KelompokTernakModel();
         $rules = [
             'nama_peternak' => 'required'
         ];
@@ -116,6 +119,12 @@ class Master extends BaseController
         
         $data['title'] = "Edit Peternak";
         $data['peternak'] = $peternakModel->get_by_id($id);
+        $data['kelompok_list'] = $kelompokModel->findAll();
+
+        if (!$data['peternak']) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
         return view('template/header', $data)
              . view('master/peternak/v_form', $data)
              . view('template/footer');

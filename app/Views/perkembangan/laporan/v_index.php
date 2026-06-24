@@ -43,7 +43,7 @@
                     <tr>
                         <th rowspan="2" class="align-middle text-center">No.</th>
                         <th rowspan="2" class="align-middle text-center">Nama Kelompok</th>
-                        <th colspan="5" class="text-center">Perkembangan Populasi</th>
+                        <th colspan="6" class="text-center">Perkembangan Populasi</th>
                         <th rowspan="2" class="align-middle text-center">Aksi</th>
                     </tr>
                     <tr>
@@ -52,6 +52,7 @@
                         <th class="text-center">Mati</th>
                         <th class="text-center">Jual</th>
                         <th class="text-center">Akhir</th>
+                        <th class="text-center">Kumulatif</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -75,6 +76,9 @@
                                 $penjualan = $item->jual_jt + $item->jual_bt;
                                 echo ($populasi_awal + $kelahiran - $kematian - $penjualan);
                             ?>
+                        </td>
+                        <td class="text-center">
+                            <?= ($item->jumlah_kumulatif_jt + $item->jumlah_kumulatif_bt) ?>
                         </td>
                         <td class="text-center">
                             <a href="<?php echo site_url('perkembangan/laporan_delete/'.$item->id); ?>" onclick="return confirm('Yakin hapus data?');" class="btn btn-danger btn-xs"><i class="fas fa-trash"></i> Hapus</a>

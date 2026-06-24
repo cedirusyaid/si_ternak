@@ -57,36 +57,7 @@
             <textarea class="form-control" name="alamat_lengkap" rows="3"><?php echo isset($kelompok) ? $kelompok->alamat_lengkap : ''; ?></textarea>
         </div>
 
-        <div class="row">
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label>Tahun Anggaran</label>
-                    <input type="number" class="form-control" name="tahun_anggaran" value="<?php echo isset($kelompok) ? $kelompok->tahun_anggaran : date('Y'); ?>">
-                </div>
-            </div>
-            <div class="col-md-4">
-                 <div class="form-group">
-                    <label>Sumber Dana</label>
-                    <select name="sumber_dana" class="form-control">
-                        <?php $sd = isset($kelompok) ? $kelompok->sumber_dana : ''; ?>
-                        <option value="APBN" <?php echo ($sd == 'APBN') ? 'selected' : ''; ?>>APBN</option>
-                        <option value="APBD I" <?php echo ($sd == 'APBD I') ? 'selected' : ''; ?>>APBD I</option>
-                        <option value="APBD II" <?php echo ($sd == 'APBD II') ? 'selected' : ''; ?>>APBD II</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label>Ras Ternak</label>
-                    <select name="rasternak" class="form-control">
-                        <?php $rt = isset($kelompok) ? $kelompok->rasternak : ''; ?>
-                        <option value="Bali" <?php echo ($rt == 'Bali') ? 'selected' : ''; ?>>Bali</option>
-                        <option value="Kambing" <?php echo ($rt == 'Kambing') ? 'selected' : ''; ?>>Kambing</option>
-                        <option value="Sapi Perah" <?php echo ($rt == 'Sapi Perah') ? 'selected' : ''; ?>>Sapi Perah</option>
-                    </select>
-                </div>
-            </div>
-        </div>
+        <!-- Bantuan dipindahkan ke individu peternak (bantuan per orang) -->
     </div>
     <div class="card-footer">
         <button type="submit" class="btn btn-primary">Simpan</button>

@@ -117,6 +117,25 @@
                 </div>
             </div>
         </div>
+        <div class="card card-outline card-warning">
+            <div class="card-header"><h3 class="card-title">C. Jumlah Kumulatif</h3></div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 border-right">
+                        <div class="form-group">
+                            <label>Jantan</label>
+                            <input type="number" name="jumlah_kumulatif_jt" class="form-control" value="0">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Betina</label>
+                            <input type="number" name="jumlah_kumulatif_bt" class="form-control" value="0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="form-group">
             <label>Keterangan</label>

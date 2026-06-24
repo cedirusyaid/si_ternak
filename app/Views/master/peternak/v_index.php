@@ -26,8 +26,10 @@
                             <tr>
                                 <th>ID Peternak</th>
                                 <th>Nama Peternak</th>
+                                <th>Kelompok Ternak</th>
                                 <th>Alamat</th>
                                 <th>No HP</th>
+                                <th>Bantuan</th>
                                 <th>Jumlah Hewan (Aktif)</th>
                                 <th>Aksi</th>
                             </tr>
@@ -37,8 +39,16 @@
                                 <tr>
                                     <td><?= $peternak->id_peternak ?></td>
                                     <td><?= $peternak->nama_peternak ?></td>
+                                    <td><?= $peternak->nama_kelompok ?: '-' ?></td>
                                     <td><?= $peternak->alamat ?>, <?= $peternak->desa ?>, <?= $peternak->kecamatan ?></td>
                                     <td><?= $peternak->no_hp ?></td>
+                                    <td>
+                                        <?php if (!empty($peternak->ras_ternak)): ?>
+                                            <?= $peternak->ras_ternak ?> (<?= $peternak->sumber_dana ?> - <?= $peternak->tahun_anggaran ?>)
+                                        <?php else: ?>
+                                            -
+                                        <?php endif; ?>
+                                    </td>
                                     <td><span class="badge bg-blue"><?= $peternak->jumlah_hewan ?></span></td>
                                     <td>
                                         <a href="<?= site_url('master/peternak_edit/' . $peternak->id_peternak) ?>" class="btn btn-warning btn-xs">Edit</a>

@@ -18,6 +18,7 @@ class LaporanBulananModel extends Model
         'mati_dewasa_jt', 'mati_dewasa_bt',
         'mati_anak_jt', 'mati_anak_bt',
         'jual_jt', 'jual_bt',
+        'jumlah_kumulatif_jt', 'jumlah_kumulatif_bt',
         'keterangan'
     ];
 
@@ -70,6 +71,8 @@ class LaporanBulananModel extends Model
             'mati_anak_bt'             => $post['mati_anak_bt'],
             'jual_jt'                  => $post['jual_jt'],
             'jual_bt'                  => $post['jual_bt'],
+            'jumlah_kumulatif_jt'      => $post['jumlah_kumulatif_jt'] ?? 0,
+            'jumlah_kumulatif_bt'      => $post['jumlah_kumulatif_bt'] ?? 0,
             'keterangan'               => $post['keterangan']
         ];
         return $this->insert($data);
