@@ -1,65 +1,68 @@
-# 🐄 SI TERNAK (Sistem Informasi Peternakan)
+# CodeIgniter 4 Application Starter
 
-**Sistem Digitalisasi Recording dan Pelaporan Peternakan Terintegrasi**  
-*Dinas Peternakan dan Kesehatan Hewan Kabupaten Sinjai*
+## What is CodeIgniter?
 
----
+CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
+More information can be found at the [official site](https://codeigniter.com).
 
-## 🚀 Gambaran Umum
+This repository holds a composer-installable app starter.
+It has been built from the
+[development repository](https://github.com/codeigniter4/CodeIgniter4).
 
-**SI TERNAK** adalah aplikasi berbasis web yang dirancang untuk mentransformasi proses pencatatan (recording) dan pelaporan data peternakan di Kabupaten Sinjai dari manual ke digital. Aplikasi ini mengintegrasikan berbagai aspek peternakan, mulai dari produksi pakan, siklus reproduksi hewan, hingga monitoring populasi secara real-time.
+More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
 
-## ✨ Fitur Utama
+You can read the [user guide](https://codeigniter.com/user_guide/)
+corresponding to the latest version of the framework.
 
-- **📦 Monitoring Produksi Pakan:** Pencatatan produksi bulanan Silase dan Konsentrat dari berbagai Unit Pengolahan Pakan (UPP) di tingkat kecamatan.
-- **🧬 Sistem Reproduksi Digital:** Tracking Inseminasi Buatan (IB), Pemeriksaan Kebuntingan (PKB), hingga kelahiran ternak secara mendetail.
-- **📊 Recording Populasi:** Monitoring mutasi ternak (lahir, mati, jual, potong, hilang) untuk rekapitulasi populasi bulanan yang akurat.
-- **💉 Vaksinasi & Kesehatan:** Pencatatan program vaksinasi massal (PMK, Anthrax, dll) dan riwayat kesehatan ternak berdasarkan eartag.
-- **🗺️ Geospasial Wilayah:** Integrasi data wilayah kecamatan dan desa di Kabupaten Sinjai.
+## Installation & updates
 
-## 🛠️ Tech Stack
+`composer create-project codeigniter4/appstarter` then `composer update` whenever
+there is a new release of the framework.
 
-- **Backend:** PHP 7.4+ dengan Framework **CodeIgniter 3**
-- **Frontend:** Bootstrap 4 & **AdminLTE 3** Template
-- **Database:** MySQL / MariaDB
-- **Tools:** DataTables Server-Side, Summernote Editor
+When updating, check the release notes to see if there are any changes you might need to apply
+to your `app` folder. The affected files can be copied or merged from
+`vendor/codeigniter4/framework/app`.
 
-## ⚙️ Instalasi & Konfigurasi
+## Setup
 
-1.  **Clone Repository:**
-    ```bash
-    git clone https://github.com/username/si_ternak.git
-    ```
-2.  **Database:**
-    - Buat database baru bernama `siternak_db`.
-    - Import file `siternak_db.sql` (atau `ternak_db.sql`) ke database tersebut.
-3.  **Konfigurasi Koneksi:**
-    Edit file `application/config/database.php`:
-    ```php
-    'hostname' => 'localhost',
-    'username' => 'root',
-    'password' => '', // Isi dengan password database Anda
-    'database' => 'siternak_db',
-    ```
-4.  **Konfigurasi Base URL:**
-    Edit file `application/config/config.php`:
-    ```php
-    $config['base_url'] = 'http://localhost/si_ternak/';
-    ```
+Copy `env` to `.env` and tailor for your app, specifically the baseURL
+and any database settings.
 
-## 📂 Struktur Folder Utama
+## Important Change with index.php
 
-- `application/controllers/`: Logika alur aplikasi (Pakan, Inseminasi, Vaksinasi, dll).
-- `application/models/`: Interaksi data dengan database (M_hewan, M_pakan, dll).
-- `application/views/`: Antarmuka pengguna (UI) per modul.
-- `assets/`: File statis (CSS, JS, Images, AdminLTE).
+`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
+for better security and separation of components.
 
-## 🗺️ Roadmap Pengembangan
+This means that you should configure your web server to "point" to your project's *public* folder, and
+not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
+framework are exposed.
 
-- [x] **Fase 1:** Konsolidasi database & master data wilayah.
-- [ ] **Fase 2:** Fitur cetak laporan otomatis format PDF (Laporan Produksi Pakan).
-- [ ] **Fase 3:** Dashboard grafik tren produksi dan peta sebaran penyakit.
-- [ ] **Fase 4:** Export Excel/PDF untuk semua modul & Mobile Friendly View.
+**Please** read the user guide for a better explanation of how CI4 works!
 
----
-*Dibuat dengan ❤️ oleh Aruna (Assistant) untuk Dinas Peternakan dan Kesehatan Hewan Kabupaten Sinjai.*
+## Repository Management
+
+We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
+We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
+FEATURE REQUESTS.
+
+This repository is a "distribution" one, built by our release preparation script.
+Problems with it can be raised on our forum, or as issues in the main repository.
+
+## Server Requirements
+
+PHP version 7.4 or higher is required, with the following extensions installed:
+
+- [intl](http://php.net/manual/en/intl.requirements.php)
+- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+
+> [!WARNING]
+> The end of life date for PHP 7.4 was November 28, 2022.
+> The end of life date for PHP 8.0 was November 26, 2023.
+> If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
+> The end of life date for PHP 8.1 will be November 25, 2024.
+
+Additionally, make sure that the following extensions are enabled in your PHP:
+
+- json (enabled by default - don't turn it off)
+- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
+- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
