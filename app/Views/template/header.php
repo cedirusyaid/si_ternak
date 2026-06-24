@@ -76,14 +76,14 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-header">MAIN NAVIGATION</li>
           <li class="nav-item">
-            <a href="<?php echo site_url('dashboard'); ?>" class="nav-link <?php echo ($this->uri->segment(1) == 'dashboard' || $this->uri->segment(1) == '') ? 'active' : ''; ?>">
+            <a href="<?php echo site_url('dashboard'); ?>" class="nav-link <?php echo (uri_segment(1) == 'dashboard' || uri_segment(1) == '') ? 'active' : ''; ?>">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>Dashboard</p>
             </a>
           </li>
 
-          <li class="nav-item <?php echo $this->uri->segment(1) == 'perkembangan' ? 'menu-open' : ''; ?>">
-            <a href="#" class="nav-link <?php echo $this->uri->segment(1) == 'perkembangan' ? 'active' : ''; ?>">
+          <li class="nav-item <?php echo uri_segment(1) == 'perkembangan' ? 'menu-open' : ''; ?>">
+            <a href="#" class="nav-link <?php echo uri_segment(1) == 'perkembangan' ? 'active' : ''; ?>">
               <i class="nav-icon fas fa-chart-line"></i>
               <p>
                 Perkembangan Ternak
@@ -92,13 +92,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="<?php echo site_url('perkembangan/kelompok'); ?>" class="nav-link <?php echo $this->uri->segment(2) == 'kelompok' ? 'active' : ''; ?>">
+                <a href="<?php echo site_url('perkembangan/kelompok'); ?>" class="nav-link <?php echo uri_segment(2) == 'kelompok' ? 'active' : ''; ?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Data Kelompok Ternak</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?php echo site_url('perkembangan/laporan'); ?>" class="nav-link <?php echo $this->uri->segment(2) == 'laporan' ? 'active' : ''; ?>">
+                <a href="<?php echo site_url('perkembangan/laporan'); ?>" class="nav-link <?php echo uri_segment(2) == 'laporan' ? 'active' : ''; ?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Laporan Bulanan</p>
                 </a>
@@ -106,8 +106,8 @@
             </ul>
           </li>
 
-          <li class="nav-item <?php echo $this->uri->segment(1) == 'inseminasi' ? 'menu-open' : ''; ?>">
-            <a href="#" class="nav-link <?php echo $this->uri->segment(1) == 'inseminasi' ? 'active' : ''; ?>">
+          <li class="nav-item <?php echo uri_segment(1) == 'inseminasi' ? 'menu-open' : ''; ?>">
+            <a href="#" class="nav-link <?php echo uri_segment(1) == 'inseminasi' ? 'active' : ''; ?>">
               <i class="nav-icon fas fa-venus-mars"></i>
               <p>
                 Reproduksi
@@ -116,19 +116,19 @@
             </a>
             <ul class="nav nav-treeview">
                <li class="nav-item">
-                <a href="<?= site_url('inseminasi') ?>" class="nav-link <?= ($this->uri->segment(1) == 'inseminasi' && ($this->uri->segment(2) == '' || $this->uri->segment(2) == 'index')) ? 'active' : '' ?>">
+                <a href="<?= site_url('inseminasi') ?>" class="nav-link <?= (uri_segment(1) == 'inseminasi' && (uri_segment(2) == '' || uri_segment(2) == 'index')) ? 'active' : '' ?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Data Inseminasi</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?= site_url('inseminasi/kelahiran') ?>" class="nav-link <?= $this->uri->segment(2) == 'kelahiran' ? 'active' : '' ?>">
+                <a href="<?= site_url('inseminasi/kelahiran') ?>" class="nav-link <?= uri_segment(2) == 'kelahiran' ? 'active' : '' ?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Data Kelahiran</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?= site_url('inseminasi/pkb') ?>" class="nav-link <?= $this->uri->segment(2) == 'pkb' ? 'active' : '' ?>">
+                <a href="<?= site_url('inseminasi/pkb') ?>" class="nav-link <?= uri_segment(2) == 'pkb' ? 'active' : '' ?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Pemeriksaan Kebuntingan</p>
                 </a>
@@ -136,8 +136,8 @@
             </ul>
           </li>
           
-          <li class="nav-item <?php echo $this->uri->segment(1) == 'pakan' ? 'menu-open' : ''; ?>">
-            <a href="#" class="nav-link <?php echo $this->uri->segment(1) == 'pakan' ? 'active' : ''; ?>">
+          <li class="nav-item <?php echo uri_segment(1) == 'pakan' ? 'menu-open' : ''; ?>">
+            <a href="#" class="nav-link <?php echo uri_segment(1) == 'pakan' ? 'active' : ''; ?>">
               <i class="nav-icon fas fa-seedling"></i>
               <p>
                 Produksi Pakan
@@ -146,19 +146,19 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="<?php echo site_url('pakan/laporan_produksi'); ?>" class="nav-link <?php echo $this->uri->segment(2) == 'laporan_produksi' ? 'active' : ''; ?>">
+                <a href="<?php echo site_url('pakan/laporan_produksi'); ?>" class="nav-link <?php echo uri_segment(2) == 'laporan_produksi' ? 'active' : ''; ?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Input Laporan</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?php echo site_url('pakan/laporan_bulanan'); ?>" class="nav-link <?php echo $this->uri->segment(2) == 'laporan_bulanan' ? 'active' : ''; ?>">
+                <a href="<?php echo site_url('pakan/laporan_bulanan'); ?>" class="nav-link <?php echo uri_segment(2) == 'laporan_bulanan' ? 'active' : ''; ?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Laporan Bulanan</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?php echo site_url('pakan'); ?>" class="nav-link <?php echo ($this->uri->segment(1) == 'pakan' && ($this->uri->segment(2) == '' || $this->uri->segment(2) == 'index')) ? 'active' : ''; ?>">
+                <a href="<?php echo site_url('pakan'); ?>" class="nav-link <?php echo (uri_segment(1) == 'pakan' && (uri_segment(2) == '' || uri_segment(2) == 'index')) ? 'active' : ''; ?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Jenis Pakan</p>
                 </a>
@@ -166,8 +166,8 @@
             </ul>
           </li>
 
-          <li class="nav-item <?php echo $this->uri->segment(1) == 'vaksinasi' ? 'menu-open' : ''; ?>">
-            <a href="#" class="nav-link <?php echo $this->uri->segment(1) == 'vaksinasi' ? 'active' : ''; ?>">
+          <li class="nav-item <?php echo uri_segment(1) == 'vaksinasi' ? 'menu-open' : ''; ?>">
+            <a href="#" class="nav-link <?php echo uri_segment(1) == 'vaksinasi' ? 'active' : ''; ?>">
               <i class="nav-icon fas fa-syringe"></i>
               <p>
                 Vaksinasi
@@ -176,19 +176,19 @@
             </a>
             <ul class="nav nav-treeview">
                <li class="nav-item">
-                <a href="<?= site_url('vaksinasi') ?>" class="nav-link <?= ($this->uri->segment(1) == 'vaksinasi' && ($this->uri->segment(2) == '' || $this->uri->segment(2) == 'index')) ? 'active' : '' ?>">
+                <a href="<?= site_url('vaksinasi') ?>" class="nav-link <?= (uri_segment(1) == 'vaksinasi' && (uri_segment(2) == '' || uri_segment(2) == 'index')) ? 'active' : '' ?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Upload Laporan</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?= site_url('vaksinasi/rekap') ?>" class="nav-link <?= $this->uri->segment(2) == 'rekap' ? 'active' : '' ?>">
+                <a href="<?= site_url('vaksinasi/rekap') ?>" class="nav-link <?= uri_segment(2) == 'rekap' ? 'active' : '' ?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Rekap per Bulan</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?= site_url('vaksinasi/rekap_petugas') ?>" class="nav-link <?= $this->uri->segment(2) == 'rekap_petugas' ? 'active' : '' ?>">
+                <a href="<?= site_url('vaksinasi/rekap_petugas') ?>" class="nav-link <?= uri_segment(2) == 'rekap_petugas' ? 'active' : '' ?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Rekap per Petugas</p>
                 </a>
@@ -198,7 +198,7 @@
           
           
           <li class="nav-item">
-            <a href="<?php echo site_url('laporan'); ?>" class="nav-link <?php echo $this->uri->segment(1) == 'laporan' ? 'active' : ''; ?>">
+            <a href="<?php echo site_url('laporan'); ?>" class="nav-link <?php echo uri_segment(1) == 'laporan' ? 'active' : ''; ?>">
               <i class="nav-icon fas fa-file-alt"></i>
               <p>Generate Laporan</p>
             </a>
@@ -206,34 +206,34 @@
 
           <li class="nav-header">MASTER DATA</li>
           <li class="nav-item">
-             <a href="<?php echo site_url('master/petugas'); ?>" class="nav-link <?php echo ($this->uri->segment(1) == 'master' && $this->uri->segment(2) == 'petugas') ? 'active' : ''; ?>">
+             <a href="<?php echo site_url('master/petugas'); ?>" class="nav-link <?php echo (uri_segment(1) == 'master' && uri_segment(2) == 'petugas') ? 'active' : ''; ?>">
               <i class="fas fa-id-card-alt nav-icon"></i>
               <p>Petugas Lapangan</p>
-            </a>
+             </a>
           </li>
           <li class="nav-item">
-             <a href="<?php echo site_url('master/peternak'); ?>" class="nav-link <?php echo ($this->uri->segment(1) == 'master' && $this->uri->segment(2) == 'peternak') ? 'active' : ''; ?>">
+             <a href="<?php echo site_url('master/peternak'); ?>" class="nav-link <?php echo (uri_segment(1) == 'master' && uri_segment(2) == 'peternak') ? 'active' : ''; ?>">
               <i class="fas fa-users nav-icon"></i>
               <p>Data Peternak</p>
-            </a>
+             </a>
           </li>
           <li class="nav-item">
-             <a href="<?php echo site_url('master/hewan'); ?>" class="nav-link <?php echo ($this->uri->segment(1) == 'master' && $this->uri->segment(2) == 'hewan') ? 'active' : ''; ?>">
+             <a href="<?php echo site_url('master/hewan'); ?>" class="nav-link <?php echo (uri_segment(1) == 'master' && uri_segment(2) == 'hewan') ? 'active' : ''; ?>">
               <i class="fas fa-paw nav-icon"></i>
               <p>Data Hewan</p>
-            </a>
+             </a>
           </li>
            <li class="nav-item">
-             <a href="<?php echo site_url('master/pakan'); ?>" class="nav-link <?php echo ($this->uri->segment(1) == 'master' && $this->uri->segment(2) == 'pakan') ? 'active' : ''; ?>">
+             <a href="<?php echo site_url('master/pakan'); ?>" class="nav-link <?php echo (uri_segment(1) == 'master' && uri_segment(2) == 'pakan') ? 'active' : ''; ?>">
               <i class="fas fa-box nav-icon"></i>
               <p>Jenis Pakan</p>
-            </a>
+             </a>
           </li>
           <li class="nav-item">
-             <a href="<?php echo site_url('master/pengguna'); ?>" class="nav-link <?php echo ($this->uri->segment(1) == 'master' && $this->uri->segment(2) == 'pengguna') ? 'active' : ''; ?>">
+             <a href="<?php echo site_url('master/pengguna'); ?>" class="nav-link <?php echo (uri_segment(1) == 'master' && uri_segment(2) == 'pengguna') ? 'active' : ''; ?>">
               <i class="fas fa-user-cog nav-icon"></i>
               <p>Manajemen Pengguna</p>
-            </a>
+             </a>
           </li>
         </ul>
       </nav>

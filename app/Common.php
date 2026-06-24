@@ -35,3 +35,11 @@ if (! function_exists('validation_errors')) {
         return $html;
     }
 }
+
+if (! function_exists('uri_segment')) {
+    function uri_segment(int $index) {
+        $segments = service('request')->getUri()->getSegments();
+        return $segments[$index - 1] ?? '';
+    }
+}
+
