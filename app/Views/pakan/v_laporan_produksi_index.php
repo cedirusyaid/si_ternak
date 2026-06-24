@@ -75,28 +75,41 @@
                         <tbody>
                             <?php if (empty($laporan)): ?>
                                 <tr>
-                                    <td colspan="8" class="text-center">Tidak ada data laporan produksi pada periode ini</td>
+                                    <td colspan="8" class="text-center">Tidak ada kelompok yang terdaftar</td>
                                 </tr>
                             <?php else: ?>
-                                <?php $no = 1; foreach ($laporan as $row) : ?>
+                                <?php 
+                                $months = [
+                                    1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 
+                                    5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus', 
+                                    9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
+                                ];
+                                $no = 1; 
+                                foreach ($laporan as $row) : 
+                                    $is_unsubmitted = empty($row->id_laporan);
+                                ?>
                                     <tr>
                                         <td><?= $no++; ?></td>
-                                        <td><?= $row->id_laporan; ?></td>
+                                        <td><?= $is_unsubmitted ? '-' : $row->id_laporan; ?></td>
                                         <td><?= htmlspecialchars($row->nama_kelompok); ?></td>
                                         <td>
                                             <?php 
-                                            $months = [
-                                                1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 
-                                                5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus', 
-                                                9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
-                                            ];
-                                            echo isset($months[$row->bulan]) ? $months[$row->bulan] : $row->bulan;
+                                            $display_bulan = !$is_unsubmitted ? $row->bulan : ($selected_bulan !== 'all' ? $selected_bulan : '-');
+                                            if ($display_bulan !== '-') {
+                                                echo isset($months[$display_bulan]) ? $months[$display_bulan] : $display_bulan;
+                                            } else {
+                                                echo '-';
+                                            }
                                             ?>
                                         </td>
-                                        <td><?= $row->tahun; ?></td>
-                                        <td><b><?= number_format($row->total_produksi, 0, ',', '.'); ?></b></td>
                                         <td>
-                                            <?php if($row->status == 'verified'): ?>
+                                            <?= !$is_unsubmitted ? $row->tahun : ($selected_tahun !== 'all' ? $selected_tahun : '-'); ?>
+                                        </td>
+                                        <td><b><?= number_format($row->total_produksi ?: 0, 0, ',', '.'); ?></b></td>
+                                        <td>
+                                            <?php if ($is_unsubmitted): ?>
+                                                <span class="label label-danger">Belum Input</span>
+                                            <?php elseif($row->status == 'verified'): ?>
                                                 <span class="label label-success">Verified</span>
                                             <?php elseif($row->status == 'submitted'): ?>
                                                 <span class="label label-warning">Submitted</span>
@@ -105,9 +118,22 @@
                                             <?php endif; ?>
                                         </td>
                                         <td>
-                                            <a href="<?= site_url('pakan/laporan_produksi_detail/' . $row->id_laporan); ?>" class="btn btn-info btn-xs"><i class="fa fa-eye"></i> Detail</a>
-                                            <a href="<?= site_url('pakan/laporan_produksi_edit/' . $row->id_laporan); ?>" class="btn btn-warning btn-xs"><i class="fa fa-edit"></i> Edit</a>
-                                            <a href="<?= site_url('pakan/laporan_produksi_delete/' . $row->id_laporan); ?>" class="btn btn-danger btn-xs" onclick="return confirm('Yakin ingin menghapus data ini?');"><i class="fa fa-trash"></i> Hapus</a>
+                                            <?php if ($is_unsubmitted): ?>
+                                                <?php 
+                                                $input_url = 'pakan/laporan_produksi_create?id_kelompok=' . $row->id_kelompok;
+                                                if ($selected_bulan !== 'all') {
+                                                    $input_url .= '&bulan=' . $selected_bulan;
+                                                }
+                                                if ($selected_tahun !== 'all') {
+                                                    $input_url .= '&tahun=' . $selected_tahun;
+                                                }
+                                                ?>
+                                                <a href="<?= site_url($input_url); ?>" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Input Laporan</a>
+                                            <?php else: ?>
+                                                <a href="<?= site_url('pakan/laporan_produksi_detail/' . $row->id_laporan); ?>" class="btn btn-info btn-xs"><i class="fa fa-eye"></i> Detail</a>
+                                                <a href="<?= site_url('pakan/laporan_produksi_edit/' . $row->id_laporan); ?>" class="btn btn-warning btn-xs"><i class="fa fa-edit"></i> Edit</a>
+                                                <a href="<?= site_url('pakan/laporan_produksi_delete/' . $row->id_laporan); ?>" class="btn btn-danger btn-xs" onclick="return confirm('Yakin ingin menghapus data ini?');"><i class="fa fa-trash"></i> Hapus</a>
+                                            <?php endif; ?>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

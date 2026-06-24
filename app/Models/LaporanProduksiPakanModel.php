@@ -14,21 +14,23 @@ class LaporanProduksiPakanModel extends Model
 
     public function get_all($filters = [])
     {
-        $builder = $this->builder();
-        $builder->select('laporan_produksi_pakan.*, kelompok_produksi_pakan.nama_kelompok, SUM(detail_produksi_pakan.jumlah_produksi) as total_produksi');
-        $builder->join('kelompok_produksi_pakan', 'laporan_produksi_pakan.id_kelompok = kelompok_produksi_pakan.id_kelompok');
-        $builder->join('detail_produksi_pakan', 'laporan_produksi_pakan.id_laporan = detail_produksi_pakan.id_laporan', 'left');
+        $db = \Config\Database::connect();
+        $builder = $db->table('kelompok_produksi_pakan k');
+        $builder->select('k.id_kelompok, k.nama_kelompok, l.id_laporan, l.bulan, l.tahun, l.status, SUM(d.jumlah_produksi) as total_produksi');
 
-        if (!empty($filters['bulan'])) {
-            $builder->where('laporan_produksi_pakan.bulan', $filters['bulan']);
+        $joinCond = 'k.id_kelompok = l.id_kelompok';
+        if (!empty($filters['bulan']) && $filters['bulan'] !== 'all') {
+            $joinCond .= ' AND l.bulan = ' . $db->escape($filters['bulan']);
         }
-        if (!empty($filters['tahun'])) {
-            $builder->where('laporan_produksi_pakan.tahun', $filters['tahun']);
+        if (!empty($filters['tahun']) && $filters['tahun'] !== 'all') {
+            $joinCond .= ' AND l.tahun = ' . $db->escape($filters['tahun']);
         }
 
-        $builder->groupBy('laporan_produksi_pakan.id_laporan');
-        $builder->orderBy('laporan_produksi_pakan.tahun', 'DESC');
-        $builder->orderBy('laporan_produksi_pakan.bulan', 'DESC');
+        $builder->join('laporan_produksi_pakan l', $joinCond, 'left');
+        $builder->join('detail_produksi_pakan d', 'l.id_laporan = d.id_laporan', 'left');
+
+        $builder->groupBy('k.id_kelompok, l.id_laporan');
+        $builder->orderBy('k.nama_kelompok', 'ASC');
         
         return $builder->get()->getResult();
     }

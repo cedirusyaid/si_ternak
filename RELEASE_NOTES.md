@@ -1,5 +1,10 @@
 # RELEASE NOTES - SI TERNAK
 
+## [v1.0.5] - 2026-06-24
+### ✨ Added
+- Menampilkan seluruh Kelompok Produksi Pakan pada daftar laporan produksi. Kelompok yang belum menginput laporan pada bulan dan tahun terpilih akan berstatus **"Belum Input"** (label merah).
+- Menyediakan tombol cepat **"Input Laporan"** pada baris kelompok yang belum mengisi, yang secara otomatis mengisi data Kelompok, Bulan, dan Tahun pada form input laporan baru.
+
 ## [v1.0.4] - 2026-06-24
 ### ✨ Added
 - Menambahkan Halaman Detail Inseminasi Buatan (`inseminasi/detail_ib`) yang menampilkan rincian data inseminasi (status, tanggal, inseminator, identitas hewan, pemilik, alamat lengkap, dan metadata pembuat).

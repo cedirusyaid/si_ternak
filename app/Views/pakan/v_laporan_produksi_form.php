@@ -21,7 +21,7 @@
                         <select class="form-control" name="id_kelompok" required>
                             <option value="">-- Pilih Kelompok --</option>
                             <?php foreach ($kelompok as $row) : ?>
-                                <option value="<?php echo $row->id_kelompok; ?>" <?= ($is_edit && $laporan->id_kelompok == $row->id_kelompok) ? 'selected' : ''; ?>><?php echo $row->nama_kelompok; ?></option>
+                                <option value="<?php echo $row->id_kelompok; ?>" <?= (($is_edit && $laporan->id_kelompok == $row->id_kelompok) || (!$is_edit && isset($default_kelompok) && $default_kelompok == $row->id_kelompok)) ? 'selected' : ''; ?>><?php echo $row->nama_kelompok; ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -40,7 +40,7 @@
                                     ];
                                     foreach ($months as $num => $name): 
                                     ?>
-                                        <option value="<?= $num ?>" <?= (($is_edit && $laporan->bulan == $num) || (!$is_edit && date('n') == $num)) ? 'selected' : '' ?>><?= $name ?></option>
+                                        <option value="<?= $num ?>" <?= (($is_edit && $laporan->bulan == $num) || (!$is_edit && isset($default_bulan) && $default_bulan == $num) || (!$is_edit && !isset($default_bulan) && date('n') == $num)) ? 'selected' : '' ?>><?= $name ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -48,7 +48,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="tahun">Tahun Laporan</label>
-                                <input type="number" class="form-control" name="tahun" min="2020" max="<?= date('Y') + 1 ?>" value="<?= $is_edit ? $laporan->tahun : date('Y'); ?>" required>
+                                <input type="number" class="form-control" name="tahun" min="2020" max="<?= date('Y') + 1 ?>" value="<?= $is_edit ? $laporan->tahun : (isset($default_tahun) && !empty($default_tahun) ? $default_tahun : date('Y')); ?>" required>
                             </div>
                         </div>
                     </div>

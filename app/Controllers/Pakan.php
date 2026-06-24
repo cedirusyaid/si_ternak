@@ -114,6 +114,10 @@ class Pakan extends BaseController
         $data['title'] = 'Tambah Laporan Produksi Pakan';
         $data['kelompok'] = $kelompokModel->get_all();
         $data['jenis_pakan'] = $jenisPakanModel->get_all();
+        
+        $data['default_kelompok'] = $this->request->getGet('id_kelompok');
+        $data['default_bulan'] = $this->request->getGet('bulan');
+        $data['default_tahun'] = $this->request->getGet('tahun');
 
         return view('template/header', $data)
              . view('pakan/v_laporan_produksi_form', $data)
