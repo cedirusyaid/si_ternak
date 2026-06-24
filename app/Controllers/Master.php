@@ -141,61 +141,22 @@ class Master extends BaseController
     // --- CRUD JENIS PAKAN ---
     public function pakan()
     {
-        $jenisPakanModel = new JenisPakanModel();
-        $data['title'] = "Jenis Pakan";
-        $data['pakan_list'] = $jenisPakanModel->get_all();
-
-        return view('template/header', $data)
-             . view('master/pakan/v_index', $data)
-             . view('template/footer');
+        return redirect()->to(base_url('pakan'));
     }
     
     public function pakan_add()
     {
-        $jenisPakanModel = new JenisPakanModel();
-        $rules = [
-            'id_jenis_pakan' => 'required|is_unique[jenis_pakan.id_jenis_pakan]',
-            'nama_jenis'     => 'required'
-        ];
-
-        if ($this->request->getMethod() === 'post' && $this->validate($rules)) {
-            $jenisPakanModel->save_pakan($this->request->getPost());
-            session()->setFlashdata('success', 'Data berhasil ditambahkan.');
-            return redirect()->to(base_url('master/pakan'));
-        }
-
-        $data['title'] = "Tambah Jenis Pakan";
-        return view('template/header', $data)
-             . view('master/pakan/v_form', $data)
-             . view('template/footer');
+        return redirect()->to(base_url('pakan/create'));
     }
 
     public function pakan_edit($id)
     {
-        $jenisPakanModel = new JenisPakanModel();
-        $rules = [
-            'nama_jenis' => 'required'
-        ];
-
-        if ($this->request->getMethod() === 'post' && $this->validate($rules)) {
-            $jenisPakanModel->update_pakan($this->request->getPost());
-            session()->setFlashdata('success', 'Data berhasil diperbarui.');
-            return redirect()->to(base_url('master/pakan'));
-        }
-        
-        $data['title'] = "Edit Jenis Pakan";
-        $data['pakan'] = $jenisPakanModel->get_by_id($id);
-        return view('template/header', $data)
-             . view('master/pakan/v_form', $data)
-             . view('template/footer');
+        return redirect()->to(base_url('pakan/edit/' . $id));
     }
     
     public function pakan_delete($id)
     {
-        $jenisPakanModel = new JenisPakanModel();
-        $jenisPakanModel->delete($id);
-        session()->setFlashdata('success', 'Data berhasil dihapus.');
-        return redirect()->to(base_url('master/pakan'));
+        return redirect()->to(base_url('pakan/delete/' . $id));
     }
 
     // --- CRUD HEWAN ---
