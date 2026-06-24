@@ -106,3 +106,7 @@ Seluruh pengontrol dimigrasikan ke `app/Controllers/` dengan penyesuaian pengamb
 ### 10. Detail Laporan Produksi Pakan via Modal Pop-up (Hotfix/Feature v1.0.6)
 * **Detail Modal Dinamis:** Mengintegrasikan detail data laporan produksi pakan ke dalam Bootstrap Modal pada halaman index. Tombol "Detail" kini tidak memuat halaman baru, melainkan membuka modal pop-up secara langsung.
 * **AJAX JSON Endpoint:** Menambahkan method `laporan_produksi_detail_json($id)` pada controller `Pakan` yang mengembalikan rincian data laporan dan detail produksi pakan dalam format JSON, kemudian dirender secara dinamis di dalam modal menggunakan jQuery AJAX.
+
+### 11. Tambah Peternak Baru Langsung di Form Inseminasi (Hotfix/Feature v1.0.7)
+* **Modal Input Cepat Peternak:** Menambahkan pop-up modal Bootstrap (`#modalAddPeternak`) langsung pada form `tambah_ib`/`edit_ib`. Opsi untuk memicu modal ini otomatis muncul di bagian bawah hasil pencarian autocomplete pemilik peternak jika data yang dicari belum ada.
+* **AJAX Store & Pre-fill:** Menyediakan AJAX endpoint `inseminasi/ajax_store_peternak` untuk memvalidasi keunikan NIK dan menyimpan data peternak baru. Setelah berhasil disimpan, modal ditutup dan form pencarian langsung terisi otomatis dengan nama peternak baru beserta alamat lengkapnya tanpa perlu me-reload halaman.

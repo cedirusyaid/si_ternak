@@ -165,6 +165,61 @@ class Inseminasi extends BaseController
         return $this->response->setJSON($results);
     }
 
+    public function ajax_store_peternak()
+    {
+        $validation = \Config\Services::validation();
+        $rules = [
+            'id_peternak'   => 'required|is_unique[peternak.id_peternak]',
+            'nama_peternak' => 'required'
+        ];
+        
+        $validation->setRules($rules, [
+            'id_peternak' => [
+                'required' => 'NIK (ID Peternak) wajib diisi.',
+                'is_unique' => 'NIK sudah terdaftar di database.'
+            ],
+            'nama_peternak' => [
+                'required' => 'Nama peternak wajib diisi.'
+            ]
+        ]);
+
+        if (!$this->validate($rules)) {
+            return $this->response->setJSON([
+                'status' => false,
+                'errors' => $validation->getErrors()
+            ]);
+        }
+
+        $peternakModel = new \App\Models\PeternakModel();
+        
+        $postData = [
+            'id_peternak'   => $this->request->getPost('id_peternak'),
+            'id_kelompok'   => null,
+            'nama_peternak' => $this->request->getPost('nama_peternak'),
+            'alamat'         => $this->request->getPost('alamat') ?: '',
+            'desa'           => $this->request->getPost('desa') ?: '',
+            'kecamatan'      => $this->request->getPost('kecamatan') ?: '',
+            'no_hp'          => '',
+            'tahun_anggaran' => null,
+            'sumber_dana'    => null,
+            'ras_ternak'     => null
+        ];
+
+        $peternakModel->save_peternak($postData);
+
+        return $this->response->setJSON([
+            'status' => true,
+            'message' => 'Peternak berhasil ditambahkan.',
+            'data' => [
+                'id_peternak'   => $postData['id_peternak'],
+                'nama_peternak' => $postData['nama_peternak'],
+                'alamat'         => $postData['alamat'],
+                'desa'           => $postData['desa'],
+                'kecamatan'      => $postData['kecamatan']
+            ]
+        ]);
+    }
+
     public function destroy_ib($id)
     {
         $inseminasiModel = new InseminasiModel();

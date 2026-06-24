@@ -1,5 +1,10 @@
 # RELEASE NOTES - SI TERNAK
 
+## [v1.0.7] - 2026-06-24
+### ✨ Added
+- Menambahkan pop-up modal tambah peternak baru secara instan pada form Inseminasi Buatan (`inseminasi/tambah_ib` dan `edit_ib`) jika peternak yang dicari belum terdaftar.
+- Menambahkan AJAX endpoint `inseminasi/ajax_store_peternak` untuk memproses penyimpanan data peternak baru dengan validasi keunikan NIK secara *real-time*.
+
 ## [v1.0.6] - 2026-06-24
 ### ✨ Added
 - Menambahkan pop-up detail laporan produksi pakan berbasis **Bootstrap Modal** yang dimuat secara dinamis via AJAX JSON endpoint (`pakan/laporan_produksi_detail_json/ID`), menggantikan pemuatan halaman detail manual.

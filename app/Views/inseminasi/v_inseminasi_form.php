@@ -91,6 +91,49 @@
     </div>
 </div>
 
+<!-- Modal Tambah Peternak Baru -->
+<div class="modal fade" id="modalAddPeternak" tabindex="-1" role="dialog" aria-labelledby="modalAddPeternakLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title font-weight-bold text-primary" id="modalAddPeternakLabel"><i class="fas fa-user-plus mr-1"></i> Tambah Peternak Baru</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="form-quick-add-peternak">
+                <div class="modal-body">
+                    <div class="alert alert-danger" id="quick-peternak-errors" style="display: none;"></div>
+                    <div class="form-group">
+                        <label for="new_id_peternak">NIK (ID Peternak) <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="id_peternak" id="new_id_peternak" placeholder="Masukkan NIK 16 digit" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new_nama_peternak">Nama Peternak <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="nama_peternak" id="new_nama_peternak" placeholder="Nama Lengkap" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new_kecamatan">Kecamatan</label>
+                        <input type="text" class="form-control" name="kecamatan" id="new_kecamatan" placeholder="Contoh: Sinjai Utara">
+                    </div>
+                    <div class="form-group">
+                        <label for="new_desa">Desa</label>
+                        <input type="text" class="form-control" name="desa" id="new_desa" placeholder="Contoh: Balangnipa">
+                    </div>
+                    <div class="form-group">
+                        <label for="new_alamat">Alamat Lengkap</label>
+                        <textarea class="form-control" name="alamat" id="new_alamat" rows="2" placeholder="Nama jalan, nomor rumah, atau keterangan RT/RW..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary" id="btn-save-quick-peternak"><i class="fas fa-save mr-1"></i> Simpan Peternak</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script src="<?php echo base_url('assets/admin_template/adminlte/plugins/jquery/jquery.min.js'); ?>"></script>
 <script>
 $(document).ready(function() {
@@ -117,10 +160,74 @@ $(document).ready(function() {
                     $.each(data, function(key, val) {
                         html += '<a href="#" class="list-group-item list-group-item-action select-peternak" data-id="' + val.id_peternak + '" data-nama="' + val.nama_peternak + '" data-alamat="' + (val.alamat || '') + '" data-desa="' + (val.desa || '') + '" data-kecamatan="' + (val.kecamatan || '') + '">' + val.nama_peternak + ' (' + val.id_peternak + ')</a>';
                     });
+                    html += '<a href="#" id="btn-quick-add-peternak-trigger" class="list-group-item list-group-item-action list-group-item-info text-center font-weight-bold" style="border-top: 2px solid #ddd;"><i class="fa fa-plus-circle mr-1"></i> Tambah Peternak Baru</a>';
                     $('#peternak_results').html(html).show();
                 } else {
-                    $('#peternak_results').html('<div class="list-group-item text-muted">Peternak tidak ditemukan</div>').show();
+                    html += '<div class="list-group-item text-muted text-center">Peternak tidak ditemukan</div>';
+                    html += '<a href="#" id="btn-quick-add-peternak-trigger" class="list-group-item list-group-item-action list-group-item-info text-center font-weight-bold"><i class="fa fa-plus-circle mr-1"></i> Tambah Peternak Baru</a>';
+                    $('#peternak_results').html(html).show();
                 }
+            }
+        });
+    });
+
+    // Show Modal Add Peternak
+    $(document).on('click', '#btn-quick-add-peternak-trigger', function(e) {
+        e.preventDefault();
+        $('#peternak_results').hide().empty();
+        $('#quick-peternak-errors').hide().empty();
+        $('#form-quick-add-peternak')[0].reset();
+        
+        // Pre-fill fields based on search input
+        var searchVal = $('#search_peternak').val().trim();
+        if (searchVal.length > 0) {
+            if (/^\d+$/.test(searchVal)) {
+                $('#new_id_peternak').val(searchVal);
+            } else {
+                $('#new_nama_peternak').val(searchVal);
+            }
+        }
+        
+        $('#modalAddPeternak').modal('show');
+    });
+
+    // Save Quick Peternak
+    $('#form-quick-add-peternak').on('submit', function(e) {
+        e.preventDefault();
+        $('#quick-peternak-errors').hide().empty();
+        $('#btn-save-quick-peternak').prop('disabled', true).html('<i class="fa fa-spinner fa-spin mr-1"></i> Menyimpan...');
+        
+        $.ajax({
+            url: "<?= site_url('inseminasi/ajax_store_peternak') ?>",
+            type: 'POST',
+            dataType: 'json',
+            data: $(this).serialize(),
+            success: function(response) {
+                $('#btn-save-quick-peternak').prop('disabled', false).html('<i class="fas fa-save mr-1"></i> Simpan Peternak');
+                if (response.status) {
+                    var p = response.data;
+                    $('#search_peternak').val(p.nama_peternak + ' (' + p.id_peternak + ')');
+                    $('#id_peternak').val(p.id_peternak);
+                    $('#peternak_alamat').val(p.alamat);
+                    $('#peternak_desa').val(p.desa);
+                    $('#peternak_kecamatan').val(p.kecamatan);
+                    
+                    $('#search_hewan').val('');
+                    $('#id_hewan').val('');
+                    
+                    $('#modalAddPeternak').modal('hide');
+                } else {
+                    var errHtml = '<ul>';
+                    $.each(response.errors, function(key, val) {
+                        errHtml += '<li>' + val + '</li>';
+                    });
+                    errHtml += '</ul>';
+                    $('#quick-peternak-errors').html(errHtml).show();
+                }
+            },
+            error: function() {
+                $('#btn-save-quick-peternak').prop('disabled', false).html('<i class="fas fa-save mr-1"></i> Simpan Peternak');
+                $('#quick-peternak-errors').html('Terjadi kesalahan koneksi saat menyimpan. Silakan coba lagi.').show();
             }
         });
     });
