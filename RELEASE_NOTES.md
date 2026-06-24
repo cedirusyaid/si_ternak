@@ -1,5 +1,9 @@
 # RELEASE NOTES - SI TERNAK
 
+## [v1.0.6] - 2026-06-24
+### ✨ Added
+- Menambahkan pop-up detail laporan produksi pakan berbasis **Bootstrap Modal** yang dimuat secara dinamis via AJAX JSON endpoint (`pakan/laporan_produksi_detail_json/ID`), menggantikan pemuatan halaman detail manual.
+
 ## [v1.0.5] - 2026-06-24
 ### ✨ Added
 - Menampilkan seluruh Kelompok Produksi Pakan pada daftar laporan produksi. Kelompok yang belum menginput laporan pada bulan dan tahun terpilih akan berstatus **"Belum Input"** (label merah).

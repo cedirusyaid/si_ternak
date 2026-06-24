@@ -125,7 +125,7 @@
                                                 ?>
                                                 <a href="<?= site_url($input_url); ?>" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Input Laporan</a>
                                             <?php else: ?>
-                                                <a href="<?= site_url('pakan/laporan_produksi_detail/' . $row->id_laporan); ?>" class="btn btn-info btn-xs"><i class="fa fa-eye"></i> Detail</a>
+                                                <a href="#" data-id="<?= $row->id_laporan; ?>" class="btn btn-info btn-xs view-detail-modal"><i class="fa fa-eye"></i> Detail</a>
                                                 <a href="<?= site_url('pakan/laporan_produksi_edit/' . $row->id_laporan); ?>" class="btn btn-warning btn-xs"><i class="fa fa-edit"></i> Edit</a>
                                                 <a href="<?= site_url('pakan/laporan_produksi_delete/' . $row->id_laporan); ?>" class="btn btn-danger btn-xs" onclick="return confirm('Yakin ingin menghapus data ini?');"><i class="fa fa-trash"></i> Hapus</a>
                                             <?php endif; ?>
@@ -140,3 +140,129 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Detail Laporan -->
+<div class="modal fade" id="modalDetailLaporan" tabindex="-1" role="dialog" aria-labelledby="modalDetailLaporanLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title font-weight-bold text-primary" id="modalDetailLaporanLabel"><i class="fas fa-file-alt mr-1"></i> Detail Laporan Produksi</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <div class="col-md-6 border-right">
+                        <table class="table table-sm table-borderless">
+                            <tr>
+                                <th style="width: 40%">ID Laporan</th>
+                                <td>: <span id="modal-id-laporan">-</span></td>
+                            </tr>
+                            <tr>
+                                <th>Nama Kelompok</th>
+                                <td>: <strong id="modal-nama-kelompok">-</strong></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6 pl-md-4">
+                        <table class="table table-sm table-borderless">
+                            <tr>
+                                <th style="width: 40%">Periode Laporan</th>
+                                <td>: <span id="modal-periode">-</span></td>
+                            </tr>
+                            <tr>
+                                <th>Status</th>
+                                <td>: <span id="modal-status">-</span></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <hr>
+                <h5 class="text-primary font-weight-bold mb-3"><i class="fas fa-clipboard-list mr-1"></i> Rincian Produksi Pakan</h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead class="bg-light">
+                            <tr>
+                                <th style="width: 10%" class="text-center">No</th>
+                                <th>Jenis Pakan</th>
+                                <th>Jumlah Produksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modal-detail-rows">
+                            <!-- Rows injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="<?php echo base_url('assets/admin_template/adminlte/plugins/jquery/jquery.min.js'); ?>"></script>
+<script>
+$(document).ready(function() {
+    $('.view-detail-modal').on('click', function(e) {
+        e.preventDefault();
+        var id = $(this).data('id');
+        
+        // Clear previous content
+        $('#modal-id-laporan').text('-');
+        $('#modal-nama-kelompok').text('-');
+        $('#modal-periode').text('-');
+        $('#modal-status').html('-');
+        $('#modal-detail-rows').html('<tr><td colspan="3" class="text-center"><i class="fa fa-spinner fa-spin mr-1"></i> Memuat data...</td></tr>');
+        
+        $('#modalDetailLaporan').modal('show');
+        
+        $.ajax({
+            url: "<?= site_url('pakan/laporan_produksi_detail_json/') ?>" + id,
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                var l = response.laporan;
+                var d = response.detail;
+                
+                $('#modal-id-laporan').text(l.id_laporan);
+                $('#modal-nama-kelompok').text(l.nama_kelompok);
+                
+                var months = {
+                    1: 'Januari', 2: 'Februari', 3: 'Maret', 4: 'April', 
+                    5: 'Mei', 6: 'Juni', 7: 'Juli', 8: 'Agustus', 
+                    9: 'September', 10: 'Oktober', 11: 'November', 12: 'Desember'
+                };
+                var monthName = months[l.bulan] || l.bulan;
+                $('#modal-periode').text(monthName + ' ' + l.tahun);
+                
+                var statusBadge = '';
+                if (l.status === 'verified') {
+                    statusBadge = '<span class="label label-success">Verified</span>';
+                } else if (l.status === 'submitted') {
+                    statusBadge = '<span class="label label-warning">Submitted</span>';
+                } else {
+                    statusBadge = '<span class="label label-info">Draft</span>';
+                }
+                $('#modal-status').html(statusBadge);
+                
+                var rows = '';
+                if (d && d.length > 0) {
+                    var idx = 1;
+                    $.each(d, function(key, val) {
+                        var valProd = val.jumlah_produksi ? parseFloat(val.jumlah_produksi).toLocaleString('id-ID') : '0';
+                        rows += '<tr><td class="text-center">' + idx++ + '</td><td>' + val.nama_jenis + '</td><td><b>' + valProd + '</b> ' + (val.satuan || 'KG') + '</td></tr>';
+                    });
+                } else {
+                    rows = '<tr><td colspan="3" class="text-center text-muted">Tidak ada rincian produksi</td></tr>';
+                }
+                $('#modal-detail-rows').html(rows);
+            },
+            error: function() {
+                $('#modal-detail-rows').html('<tr><td colspan="3" class="text-center text-danger"><i class="fa fa-exclamation-triangle mr-1"></i> Gagal memuat data laporan</td></tr>');
+            }
+        });
+    });
+});
+</script>

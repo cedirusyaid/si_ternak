@@ -173,6 +173,20 @@ class Pakan extends BaseController
              . view('template/footer');
     }
 
+    public function laporan_produksi_detail_json($id)
+    {
+        $laporanModel = new LaporanProduksiPakanModel();
+        $detailModel = new DetailProduksiPakanModel();
+
+        $laporan = $laporanModel->get_by_id($id);
+        $detail = $detailModel->get_by_laporan($id);
+
+        return $this->response->setJSON([
+            'laporan' => $laporan,
+            'detail'  => $detail
+        ]);
+    }
+
     public function laporan_produksi_edit($id)
     {
         $laporanModel = new LaporanProduksiPakanModel();

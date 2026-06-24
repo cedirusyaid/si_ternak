@@ -102,3 +102,7 @@ Seluruh pengontrol dimigrasikan ke `app/Controllers/` dengan penyesuaian pengamb
 * **Tampilan Seluruh Kelompok:** Memodifikasi `get_all()` di `LaporanProduksiPakanModel.php` agar mengambil data kelompok dari tabel `kelompok_produksi_pakan` dan melakukan `LEFT JOIN` ke data laporan pada bulan/tahun terpilih. Hal ini memastikan seluruh kelompok terdaftar di halaman laporan produksi meskipun belum menginput data.
 * **Status Belum Input:** Jika suatu kelompok belum menginput laporan untuk periode yang disaring, baris kelompok tersebut ditandai dengan status **"Belum Input"** (label merah) dan total produksinya diset `0`.
 * **Pengisian Cepat (Pre-fill Form):** Menyediakan tombol **"Input Laporan"** pada baris kelompok yang belum mengisi. Tombol ini mengarahkan ke form tambah laporan dengan otomatis menyertakan ID Kelompok, Bulan, dan Tahun terpilih melalui parameter GET, sehingga pengguna tidak perlu memilih ulang data tersebut pada form baru.
+
+### 10. Detail Laporan Produksi Pakan via Modal Pop-up (Hotfix/Feature v1.0.6)
+* **Detail Modal Dinamis:** Mengintegrasikan detail data laporan produksi pakan ke dalam Bootstrap Modal pada halaman index. Tombol "Detail" kini tidak memuat halaman baru, melainkan membuka modal pop-up secara langsung.
+* **AJAX JSON Endpoint:** Menambahkan method `laporan_produksi_detail_json($id)` pada controller `Pakan` yang mengembalikan rincian data laporan dan detail produksi pakan dalam format JSON, kemudian dirender secara dinamis di dalam modal menggunakan jQuery AJAX.
