@@ -5,11 +5,6 @@
         <div class="box box-primary">
             <div class="box-header with-border">
                 <h3 class="box-title"><?= $title ?></h3>
-                <div class="box-tools pull-right">
-                    <a href="<?= site_url('pakan/laporan_produksi_create') ?>" class="btn btn-primary btn-sm">
-                        <i class="fa fa-plus"></i> Tambah Laporan
-                    </a>
-                </div>
             </div>
             <div class="box-body">
                 <?php if(session()->getFlashdata('success')) : ?>
