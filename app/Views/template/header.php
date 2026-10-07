@@ -196,7 +196,36 @@
             </ul>
           </li>
           
-          
+          <li class="nav-item <?= uri_segment(1) == 'penyakit' ? 'menu-open' : ''; ?>">
+            <a href="#" class="nav-link <?= uri_segment(1) == 'penyakit' ? 'active' : ''; ?>">
+              <i class="nav-icon fas fa-viruses text-danger"></i>
+              <p>
+                Surveilans Penyakit
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="<?= site_url('penyakit') ?>" class="nav-link <?= (uri_segment(1) == 'penyakit' && (uri_segment(2) == '' || uri_segment(2) == 'index')) ? 'active' : '' ?>">
+                  <i class="far fa-circle nav-icon text-danger"></i>
+                  <p>Peta Sebaran (Timeline)</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?= site_url('penyakit/kasus') ?>" class="nav-link <?= (uri_segment(1) == 'penyakit' && uri_segment(2) == 'kasus') ? 'active' : '' ?>">
+                  <i class="far fa-circle nav-icon text-warning"></i>
+                  <p>Laporan Kasus</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?= site_url('penyakit/master') ?>" class="nav-link <?= (uri_segment(1) == 'penyakit' && uri_segment(2) == 'master') ? 'active' : '' ?>">
+                  <i class="far fa-circle nav-icon text-info"></i>
+                  <p>Master PHMS</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
           <li class="nav-item">
             <a href="<?php echo site_url('laporan'); ?>" class="nav-link <?php echo uri_segment(1) == 'laporan' ? 'active' : ''; ?>">
               <i class="nav-icon fas fa-file-alt"></i>
