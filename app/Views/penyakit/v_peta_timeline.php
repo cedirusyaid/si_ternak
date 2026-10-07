@@ -1,10 +1,11 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 <style>
   #map {
-    height: 560px;
+    height: 580px;
     width: 100%;
     border-radius: 6px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    background: #f8fafc;
   }
   .legend-box {
     background: white;
@@ -34,15 +35,16 @@
     cursor: pointer;
   }
   .timeline-month-badge {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 700;
     color: #184c78;
     background: #e9f2f9;
     padding: 4px 14px;
     border-radius: 20px;
+    white-space: nowrap;
   }
   .leaflet-popup-content {
-    min-width: 240px;
+    min-width: 250px;
     font-size: 13px;
     line-height: 1.5;
   }
@@ -180,7 +182,7 @@
               <button id="btn-prev" class="btn btn-outline-secondary btn-sm mr-1" title="Bulan Sebelumnya">
                 <i class="fa-solid fa-backward-step"></i>
               </button>
-              <button id="btn-next" class="btn btn-outline-secondary btn-sm mr-3" title="Bulan Berikutnya">
+              <button id="btn-next" class="btn btn-outline-secondary btn-sm mr-2" title="Bulan Berikutnya">
                 <i class="fa-solid fa-forward-step"></i>
               </button>
               <span id="label-periode" class="timeline-month-badge">Oktober 2026</span>
@@ -215,10 +217,10 @@
   // Inisialisasi Peta Leaflet (Kabupaten Sinjai)
   const map = L.map('map').setView([-5.2500, 120.1400], 11);
 
-  // Basemap Tile Layer
+  // Basemap Tile Layer (OpenStreetMap)
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 18,
-    attribution: '&copy; Dinas Peternakan & Keswan Sinjai'
+    attribution: '&copy; Dinas Peternakan & Keswan Kab. Sinjai'
   }).addTo(map);
 
   // Legenda Zonasi
@@ -236,63 +238,12 @@
   legend.addTo(map);
 
   let geojsonLayer = null;
+  let hasFittedBounds = false;
   const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
   let isPlaying = false;
   let playInterval = null;
 
-  // Parser WKT (Well-Known Text) sederhana ke koordinat Leaflet Polygon/MultiPolygon
-  function parseWKT(wktString) {
-    if (!wktString) return null;
-    wktString = wktString.trim();
-    
-    // POLYGON (((lng lat, lng lat, ...)))
-    if (wktString.startsWith("POLYGON")) {
-      const match = wktString.match(/\(\((.*?)\)\)/s);
-      if (match && match[1]) {
-        const rings = match[1].split(",");
-        const coords = [];
-        for (let pair of rings) {
-          const parts = pair.trim().split(/\s+/);
-          if (parts.length >= 2) {
-            const lng = parseFloat(parts[0]);
-            const lat = parseFloat(parts[1]);
-            if (!isNaN(lat) && !isNaN(lng)) {
-              coords.push([lat, lng]);
-            }
-          }
-        }
-        return [coords];
-      }
-    }
-    // MULTIPOLYGON ((((...)), ((...))))
-    else if (wktString.startsWith("MULTIPOLYGON")) {
-      const polyStrings = wktString.replace("MULTIPOLYGON", "").trim();
-      const matches = polyStrings.match(/\(\(\((.*?)\)\)\)/g);
-      if (matches) {
-        const multiCoords = [];
-        for (let m of matches) {
-          const inner = m.replace(/\(\(\(/g, "").replace(/\)\)\)/g, "");
-          const rings = inner.split(",");
-          const coords = [];
-          for (let pair of rings) {
-            const parts = pair.trim().split(/\s+/);
-            if (parts.length >= 2) {
-              const lng = parseFloat(parts[0]);
-              const lat = parseFloat(parts[1]);
-              if (!isNaN(lat) && !isNaN(lng)) {
-                coords.push([lat, lng]);
-              }
-            }
-          }
-          if (coords.length > 0) multiCoords.push(coords);
-        }
-        return multiCoords;
-      }
-    }
-    return null;
-  }
-
-  // Fungsi memuat data GeoJSON Spasio-Temporal
+  // Memuat data GeoJSON Spasio-Temporal
   function loadMapData() {
     const tahun       = document.getElementById('filter-tahun').value;
     const bulan       = document.getElementById('timeline-slider').value;
@@ -317,25 +268,23 @@
           map.removeLayer(geojsonLayer);
         }
 
-        geojsonLayer = L.featureGroup();
-
-        data.features.forEach(feature => {
-          const props = feature.properties;
-          if (props.kasus_aktif > 0) desaTertular++;
-
-          const latLngs = parseWKT(feature.wkt);
-          if (latLngs && latLngs.length > 0) {
-            const polygon = L.polygon(latLngs, {
+        geojsonLayer = L.geoJSON(data, {
+          style: function (feature) {
+            const props = feature.properties;
+            return {
               color: '#333333',
               weight: 1,
               fillColor: props.color,
               fillOpacity: props.fillOpacity
-            });
+            };
+          },
+          onEachFeature: function (feature, layer) {
+            const props = feature.properties;
+            if (props.kasus_aktif > 0) desaTertular++;
 
-            // Pop-up Detail Kasus
             let rincianHtml = "";
             if (props.daftar_kasus && props.daftar_kasus.length > 0) {
-              rincianHtml += "<ul class='pl-3 mb-2 text-danger font-weight-bold'>";
+              rincianHtml += "<ul class='pl-3 mb-2 text-danger font-weight-bold small'>";
               props.daftar_kasus.forEach(k => {
                 rincianHtml += `<li>${k.penyakit} (${k.komoditas}): ${k.aktif} Sakit / Aktif</li>`;
               });
@@ -359,20 +308,23 @@
               </div>
             `;
 
-            polygon.bindPopup(popupContent);
-            polygon.on('mouseover', function () {
+            layer.bindPopup(popupContent);
+            layer.on('mouseover', function () {
               this.setStyle({ weight: 2.5, color: '#ffffff' });
             });
-            polygon.on('mouseout', function () {
+            layer.on('mouseout', function () {
               this.setStyle({ weight: 1, color: '#333333' });
             });
-
-            geojsonLayer.addLayer(polygon);
           }
         });
 
         document.getElementById('stat-desa-tertular').innerText = desaTertular;
         geojsonLayer.addTo(map);
+
+        if (!hasFittedBounds && geojsonLayer.getBounds().isValid()) {
+          map.fitBounds(geojsonLayer.getBounds());
+          hasFittedBounds = true;
+        }
       })
       .catch(err => console.error("Gagal memuat data spasial:", err));
   }

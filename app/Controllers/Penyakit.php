@@ -38,6 +38,47 @@ class Penyakit extends BaseController
              . view('template/footer');
     }
 
+    // Helper parser WKT ke Geometry GeoJSON
+    private function wktToGeoJsonGeometry($wkt)
+    {
+        $wkt = trim($wkt);
+        if (preg_match('/^POLYGON\s*\(\((.*?)\)\)$/si', $wkt, $m)) {
+            $rings = explode(',', trim($m[1]));
+            $coords = [];
+            foreach ($rings as $ring) {
+                $parts = preg_split('/\s+/', trim($ring));
+                if (count($parts) >= 2) {
+                    $coords[] = [(float) $parts[0], (float) $parts[1]]; // [lng, lat]
+                }
+            }
+            return [
+                'type'        => 'Polygon',
+                'coordinates' => [$coords]
+            ];
+        } elseif (preg_match('/^MULTIPOLYGON\s*\((.*?)\)$/si', $wkt, $m)) {
+            preg_match_all('/\(\((.*?)\)\)/s', $m[1], $polyMatches);
+            $multiCoords = [];
+            foreach ($polyMatches[1] as $polyStr) {
+                $rings = explode(',', trim($polyStr));
+                $coords = [];
+                foreach ($rings as $ring) {
+                    $parts = preg_split('/\s+/', trim($ring));
+                    if (count($parts) >= 2) {
+                        $coords[] = [(float) $parts[0], (float) $parts[1]];
+                    }
+                }
+                if (!empty($coords)) {
+                    $multiCoords[] = [$coords];
+                }
+            }
+            return [
+                'type'        => 'MultiPolygon',
+                'coordinates' => $multiCoords
+            ];
+        }
+        return null;
+    }
+
     // Endpoint API REST GeoJSON untuk Timeline Playback
     public function api_timeline_geojson()
     {
@@ -85,8 +126,11 @@ class Penyakit extends BaseController
                 $fillOpacity = 0.35;
             }
 
+            $geometry = $this->wktToGeoJsonGeometry($desa->wkt);
+
             $features[] = [
                 'type' => 'Feature',
+                'geometry' => $geometry,
                 'properties' => [
                     'desa_id'         => (int) $desa->desa_id,
                     'desa_nama'       => $desa->desa_nama,
@@ -101,8 +145,7 @@ class Penyakit extends BaseController
                     'color'           => $color,
                     'fillOpacity'     => $fillOpacity,
                     'daftar_kasus'    => $kasusData['daftar_kasus']
-                ],
-                'wkt' => $desa->wkt
+                ]
             ];
         }
 
