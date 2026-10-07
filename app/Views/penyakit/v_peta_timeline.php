@@ -215,13 +215,36 @@
 
 <script>
   // Inisialisasi Peta Leaflet (Kabupaten Sinjai)
-  const map = L.map('map').setView([-5.2500, 120.1400], 11);
+  const map = L.map('map', {
+    center: [-5.2500, 120.1400],
+    zoom: 11
+  });
 
-  // Basemap Tile Layer (OpenStreetMap)
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 18,
-    attribution: '&copy; Dinas Peternakan & Keswan Kab. Sinjai'
+  // Base Layers
+  const cartoVoyager = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    maxZoom: 19,
+    subdomains: 'abcd',
+    attribution: '&copy; <a href="https://carto.com/">CARTO</a> | Disnakkeswan Sinjai'
   }).addTo(map);
+
+  const cartoLight = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    maxZoom: 19,
+    subdomains: 'abcd',
+    attribution: '&copy; CARTO'
+  });
+
+  const esriSatellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    maxZoom: 18,
+    attribution: '&copy; Esri & Earthstar Geographics'
+  });
+
+  // Layer Switcher Control
+  const baseMaps = {
+    "Peta Standar (Jalan)": cartoVoyager,
+    "Peta Terang (Clean)": cartoLight,
+    "Peta Satelit": esriSatellite
+  };
+  L.control.layers(baseMaps, null, { position: 'topright' }).addTo(map);
 
   // Legenda Zonasi
   const legend = L.control({position: 'bottomright'});
