@@ -220,29 +220,38 @@
     zoom: 11
   });
 
-  // Base Layers
+  // 1. Citra Satelit Resolusi Tinggi (Esri World Imagery) - DEFAULT
+  const esriSatellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    maxZoom: 18,
+    attribution: '&copy; Esri, Maxar, Earthstar Geographics | Disnakkeswan Sinjai'
+  }).addTo(map);
+
+  // 2. Layer Label Jalan & Nama Wilayah (Hybrid Overlay)
+  const esriLabels = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+    maxZoom: 18
+  }).addTo(map);
+
+  // 3. Peta Jalan Alternatif (CartoDB Voyager)
   const cartoVoyager = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
     maxZoom: 19,
     subdomains: 'abcd',
-    attribution: '&copy; <a href="https://carto.com/">CARTO</a> | Disnakkeswan Sinjai'
-  }).addTo(map);
+    attribution: '&copy; OpenStreetMap | Disnakkeswan Sinjai'
+  });
 
+  // 4. Peta Terang (CartoDB Positron)
   const cartoLight = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     maxZoom: 19,
-    subdomains: 'abcd',
-    attribution: '&copy; CARTO'
+    subdomains: 'abcd'
   });
 
-  const esriSatellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-    maxZoom: 18,
-    attribution: '&copy; Esri & Earthstar Geographics'
-  });
+  // Layer Group untuk Satelit Hybrid
+  const satelliteHybrid = L.layerGroup([esriSatellite, esriLabels]);
 
   // Layer Switcher Control
   const baseMaps = {
-    "Peta Standar (Jalan)": cartoVoyager,
-    "Peta Terang (Clean)": cartoLight,
-    "Peta Satelit": esriSatellite
+    "🛰️ Citra Satelit (Default)": satelliteHybrid,
+    "🗺️ Peta Jalan": cartoVoyager,
+    "⚪ Peta Terang": cartoLight
   };
   L.control.layers(baseMaps, null, { position: 'topright' }).addTo(map);
 
@@ -295,10 +304,10 @@
           style: function (feature) {
             const props = feature.properties;
             return {
-              color: '#333333',
-              weight: 1,
+              color: '#ffffff',
+              weight: 1.2,
               fillColor: props.color,
-              fillOpacity: props.fillOpacity
+              fillOpacity: 0.45
             };
           },
           onEachFeature: function (feature, layer) {
